@@ -61,12 +61,13 @@
             // btnSingOut
             // 
             this.btnSingOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSingOut.AutoEllipsis = true;
             this.btnSingOut.BackColor = System.Drawing.Color.IndianRed;
-            this.btnSingOut.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnSingOut.Location = new System.Drawing.Point(847, 672);
+            this.btnSingOut.ForeColor = System.Drawing.Color.Transparent;
+            this.btnSingOut.Location = new System.Drawing.Point(864, 674);
             this.btnSingOut.Name = "btnSingOut";
             this.btnSingOut.Size = new System.Drawing.Size(120, 35);
-            this.btnSingOut.TabIndex = 2;
+            this.btnSingOut.TabIndex = 0;
             this.btnSingOut.Text = "Cerrar Sesión";
             this.btnSingOut.UseVisualStyleBackColor = false;
             this.btnSingOut.Click += new System.EventHandler(this.btnSingOut_Click);
@@ -120,7 +121,7 @@
             this.gbModulos.Controls.Add(this.lvlClientes);
             this.gbModulos.Location = new System.Drawing.Point(326, 20);
             this.gbModulos.Name = "gbModulos";
-            this.gbModulos.Size = new System.Drawing.Size(641, 634);
+            this.gbModulos.Size = new System.Drawing.Size(658, 634);
             this.gbModulos.TabIndex = 4;
             this.gbModulos.TabStop = false;
             this.gbModulos.Text = "Módulos";
@@ -149,7 +150,7 @@
             // 
             this.lblReservas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblReservas.AutoSize = true;
-            this.lblReservas.Location = new System.Drawing.Point(281, 135);
+            this.lblReservas.Location = new System.Drawing.Point(160, 135);
             this.lblReservas.Name = "lblReservas";
             this.lblReservas.Size = new System.Drawing.Size(68, 20);
             this.lblReservas.TabIndex = 9;
@@ -159,7 +160,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(167, 135);
+            this.label2.Location = new System.Drawing.Point(289, 135);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(54, 20);
             this.label2.TabIndex = 11;
@@ -172,7 +173,7 @@
             this.btnPagos.BackgroundImage = global::frmSistemaReserva.Properties.Resources.dar_dinero;
             this.btnPagos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnPagos.ForeColor = System.Drawing.Color.Transparent;
-            this.btnPagos.Location = new System.Drawing.Point(144, 32);
+            this.btnPagos.Location = new System.Drawing.Point(265, 32);
             this.btnPagos.Name = "btnPagos";
             this.btnPagos.Size = new System.Drawing.Size(100, 100);
             this.btnPagos.TabIndex = 10;
@@ -200,7 +201,7 @@
             this.btnReservas.BackgroundImage = global::frmSistemaReserva.Properties.Resources.reserva;
             this.btnReservas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnReservas.ForeColor = System.Drawing.Color.Transparent;
-            this.btnReservas.Location = new System.Drawing.Point(265, 32);
+            this.btnReservas.Location = new System.Drawing.Point(144, 32);
             this.btnReservas.Name = "btnReservas";
             this.btnReservas.Size = new System.Drawing.Size(100, 100);
             this.btnReservas.TabIndex = 8;
