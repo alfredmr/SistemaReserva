@@ -86,7 +86,6 @@ namespace frmSistemaReserva.InterfazUsuario
             }
         }
 
-
         private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == 1) // Hacer clic en una fila válida y en la columna correcta
@@ -377,7 +376,5 @@ namespace frmSistemaReserva.InterfazUsuario
                 MessageBox.Show("Seleccione un usuario para bloquear/desbloquear.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-
     }
 }

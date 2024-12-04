@@ -52,6 +52,7 @@
             this.lblNombre = new System.Windows.Forms.Label();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
             this.conexiónBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.btnEditar = new System.Windows.Forms.Button();
             this.gpbDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.conexiónBindingSource)).BeginInit();
@@ -61,6 +62,7 @@
             // 
             this.gpbDatos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpbDatos.Controls.Add(this.btnEditar);
             this.gpbDatos.Controls.Add(this.btnBloquear);
             this.gpbDatos.Controls.Add(this.txtBuscar);
             this.gpbDatos.Controls.Add(this.btnBuscar);
@@ -307,11 +309,20 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(1190, 340);
             this.dgvUsuarios.TabIndex = 1;
             this.dgvUsuarios.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellClick);
-            this.dgvUsuarios.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellClick);
             // 
             // conexiónBindingSource
             // 
             this.conexiónBindingSource.DataSource = typeof(frmSistemaReserva.AccesoDatos.Conexion);
+            // 
+            // btnEditar
+            // 
+            this.btnEditar.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnEditar.Location = new System.Drawing.Point(880, 126);
+            this.btnEditar.Name = "btnEditar";
+            this.btnEditar.Size = new System.Drawing.Size(92, 33);
+            this.btnEditar.TabIndex = 20;
+            this.btnEditar.Text = "Editar";
+            this.btnEditar.UseVisualStyleBackColor = true;
             // 
             // frmUsuarios
             // 
@@ -358,5 +369,6 @@
         private System.Windows.Forms.TextBox txtBuscar;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Button btnBloquear;
+        private System.Windows.Forms.Button btnEditar;
     }
 }
