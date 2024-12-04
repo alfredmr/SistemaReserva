@@ -63,6 +63,7 @@
             this.btnSingOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSingOut.AutoEllipsis = true;
             this.btnSingOut.BackColor = System.Drawing.Color.IndianRed;
+            this.btnSingOut.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSingOut.ForeColor = System.Drawing.Color.Transparent;
             this.btnSingOut.Location = new System.Drawing.Point(864, 674);
             this.btnSingOut.Name = "btnSingOut";
@@ -172,6 +173,7 @@
             this.btnPagos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPagos.BackgroundImage = global::frmSistemaReserva.Properties.Resources.dar_dinero;
             this.btnPagos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPagos.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnPagos.ForeColor = System.Drawing.Color.Transparent;
             this.btnPagos.Location = new System.Drawing.Point(265, 32);
             this.btnPagos.Name = "btnPagos";
@@ -186,6 +188,7 @@
             this.btnUsuarios.AutoEllipsis = true;
             this.btnUsuarios.BackgroundImage = global::frmSistemaReserva.Properties.Resources.gestion;
             this.btnUsuarios.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnUsuarios.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUsuarios.ForeColor = System.Drawing.Color.Transparent;
             this.btnUsuarios.Location = new System.Drawing.Point(144, 492);
             this.btnUsuarios.Name = "btnUsuarios";
@@ -200,6 +203,7 @@
             this.btnReservas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnReservas.BackgroundImage = global::frmSistemaReserva.Properties.Resources.reserva;
             this.btnReservas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnReservas.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnReservas.ForeColor = System.Drawing.Color.Transparent;
             this.btnReservas.Location = new System.Drawing.Point(144, 32);
             this.btnReservas.Name = "btnReservas";
@@ -213,6 +217,7 @@
             this.btnHabitaciones.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnHabitaciones.BackgroundImage = global::frmSistemaReserva.Properties.Resources.silencio;
             this.btnHabitaciones.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnHabitaciones.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnHabitaciones.ForeColor = System.Drawing.Color.Transparent;
             this.btnHabitaciones.Location = new System.Drawing.Point(23, 492);
             this.btnHabitaciones.Name = "btnHabitaciones";
@@ -226,6 +231,7 @@
             this.btnClientes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnClientes.BackgroundImage = global::frmSistemaReserva.Properties.Resources.cliente;
             this.btnClientes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnClientes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClientes.ForeColor = System.Drawing.Color.Transparent;
             this.btnClientes.Location = new System.Drawing.Point(23, 32);
             this.btnClientes.Name = "btnClientes";
