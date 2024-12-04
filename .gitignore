@@ -10,11 +10,6 @@
 *.userosscache
 *.sln.docstates
 
-# AccesoDatos no se tiene que subir
-*.dat
-AccesoDatos/
-conexion.cs
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
