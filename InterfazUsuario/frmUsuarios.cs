@@ -14,6 +14,7 @@ namespace frmSistemaReserva.InterfazUsuario
         {
             InitializeComponent();
             btnBloquear.Visible = false; // Ocultar el botón al iniciar
+            txtBuscar.Focus();
         }
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
@@ -21,7 +22,7 @@ namespace frmSistemaReserva.InterfazUsuario
             ActualizarListaUsuarios();
             LimpiarCampos();
             btnModificar.Enabled = false;
-            btnBloquear.Visible = false; // Ocultar el botón al cargar el formulario
+            btnBloquear.Visible = false;
         }
 
 
@@ -258,7 +259,6 @@ namespace frmSistemaReserva.InterfazUsuario
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            
             LimpiarCampos(); // Limpiar todos los campos para evitar residuos de datos previos
             activar();
         }
@@ -328,6 +328,15 @@ namespace frmSistemaReserva.InterfazUsuario
                 // Asignar los resultados filtrados al DataGridView
                 dgvUsuarios.DataSource = usuariosFiltrados;
                 dgvUsuarios.Refresh();
+            }
+        }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnBuscar.PerformClick();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
 

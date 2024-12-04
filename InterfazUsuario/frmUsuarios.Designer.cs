@@ -106,6 +106,7 @@
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(163, 26);
             this.txtBuscar.TabIndex = 18;
+            this.txtBuscar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBuscar_KeyDown);
             // 
             // btnBuscar
             // 
@@ -201,6 +202,7 @@
             this.txtClave.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtClave.Location = new System.Drawing.Point(629, 58);
             this.txtClave.Name = "txtClave";
+            this.txtClave.PasswordChar = '*';
             this.txtClave.Size = new System.Drawing.Size(163, 26);
             this.txtClave.TabIndex = 9;
             // 

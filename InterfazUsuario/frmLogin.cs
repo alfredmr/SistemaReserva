@@ -10,6 +10,7 @@ namespace frmSistemaReserva
         public frmLogin()
         {
             InitializeComponent();
+            txtUsuario.Focus();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
