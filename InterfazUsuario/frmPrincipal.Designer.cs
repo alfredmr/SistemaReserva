@@ -35,15 +35,15 @@
             this.lblUsuario = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.gbModulos = new System.Windows.Forms.GroupBox();
-            this.lvlClientes = new System.Windows.Forms.Label();
-            this.lblHabitaciones = new System.Windows.Forms.Label();
-            this.lblReservas = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.btnPagos = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnUsuarios = new System.Windows.Forms.Button();
             this.btnReservas = new System.Windows.Forms.Button();
+            this.lblReservas = new System.Windows.Forms.Label();
             this.btnHabitaciones = new System.Windows.Forms.Button();
+            this.lblHabitaciones = new System.Windows.Forms.Label();
             this.btnClientes = new System.Windows.Forms.Button();
+            this.lvlClientes = new System.Windows.Forms.Label();
             this.gpbInfoUsuario.SuspendLayout();
             this.gbModulos.SuspendLayout();
             this.SuspendLayout();
@@ -127,46 +127,6 @@
             this.gbModulos.TabStop = false;
             this.gbModulos.Text = "Módulos";
             // 
-            // lvlClientes
-            // 
-            this.lvlClientes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lvlClientes.AutoSize = true;
-            this.lvlClientes.Location = new System.Drawing.Point(40, 135);
-            this.lvlClientes.Name = "lvlClientes";
-            this.lvlClientes.Size = new System.Drawing.Size(66, 20);
-            this.lvlClientes.TabIndex = 5;
-            this.lvlClientes.Text = "Clientes";
-            // 
-            // lblHabitaciones
-            // 
-            this.lblHabitaciones.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblHabitaciones.AutoSize = true;
-            this.lblHabitaciones.Location = new System.Drawing.Point(22, 595);
-            this.lblHabitaciones.Name = "lblHabitaciones";
-            this.lblHabitaciones.Size = new System.Drawing.Size(102, 20);
-            this.lblHabitaciones.TabIndex = 7;
-            this.lblHabitaciones.Text = "Habitaciones";
-            // 
-            // lblReservas
-            // 
-            this.lblReservas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblReservas.AutoSize = true;
-            this.lblReservas.Location = new System.Drawing.Point(160, 135);
-            this.lblReservas.Name = "lblReservas";
-            this.lblReservas.Size = new System.Drawing.Size(68, 20);
-            this.lblReservas.TabIndex = 9;
-            this.lblReservas.Text = "Reserva";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(289, 135);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 20);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Pagos";
-            // 
             // btnPagos
             // 
             this.btnPagos.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
@@ -180,6 +140,16 @@
             this.btnPagos.Size = new System.Drawing.Size(100, 100);
             this.btnPagos.TabIndex = 10;
             this.btnPagos.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(289, 135);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(54, 20);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Pagos";
             // 
             // btnUsuarios
             // 
@@ -211,6 +181,16 @@
             this.btnReservas.TabIndex = 8;
             this.btnReservas.UseVisualStyleBackColor = true;
             // 
+            // lblReservas
+            // 
+            this.lblReservas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblReservas.AutoSize = true;
+            this.lblReservas.Location = new System.Drawing.Point(160, 135);
+            this.lblReservas.Name = "lblReservas";
+            this.lblReservas.Size = new System.Drawing.Size(68, 20);
+            this.lblReservas.TabIndex = 9;
+            this.lblReservas.Text = "Reserva";
+            // 
             // btnHabitaciones
             // 
             this.btnHabitaciones.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
@@ -225,6 +205,16 @@
             this.btnHabitaciones.TabIndex = 6;
             this.btnHabitaciones.UseVisualStyleBackColor = true;
             // 
+            // lblHabitaciones
+            // 
+            this.lblHabitaciones.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblHabitaciones.AutoSize = true;
+            this.lblHabitaciones.Location = new System.Drawing.Point(22, 595);
+            this.lblHabitaciones.Name = "lblHabitaciones";
+            this.lblHabitaciones.Size = new System.Drawing.Size(102, 20);
+            this.lblHabitaciones.TabIndex = 7;
+            this.lblHabitaciones.Text = "Habitaciones";
+            // 
             // btnClientes
             // 
             this.btnClientes.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
@@ -238,6 +228,16 @@
             this.btnClientes.Size = new System.Drawing.Size(100, 100);
             this.btnClientes.TabIndex = 4;
             this.btnClientes.UseVisualStyleBackColor = true;
+            // 
+            // lvlClientes
+            // 
+            this.lvlClientes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lvlClientes.AutoSize = true;
+            this.lvlClientes.Location = new System.Drawing.Point(40, 135);
+            this.lvlClientes.Name = "lvlClientes";
+            this.lvlClientes.Size = new System.Drawing.Size(66, 20);
+            this.lvlClientes.TabIndex = 5;
+            this.lvlClientes.Text = "Clientes";
             // 
             // frmPrincipal
             // 

@@ -34,9 +34,6 @@ namespace frmSistemaReserva
             // Verificar si el usuario es válido y obtener su rol
             var result = dbHelper.ValidarUsuarioYObtenerRol(nombreUsuario, contrasena);
 
-            // Imprimir el resultado en la consola para depuración
-            Console.WriteLine("Resultado de la validación: " + result);
-
             if (result.rol == "Empleado" || result.rol == "Administrador")
             {
                 MessageBox.Show("Inicio de sesión exitoso", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

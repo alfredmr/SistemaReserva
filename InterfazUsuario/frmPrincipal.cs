@@ -39,6 +39,5 @@ namespace frmSistemaReserva.InterfazUsuario
             loginForm.Show();
             this.Close();
         }
-
     }
 }

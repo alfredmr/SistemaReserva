@@ -15,6 +15,7 @@ namespace frmSistemaReserva.InterfazUsuario
             InitializeComponent();
             btnBloquear.Visible = false; // Ocultar el botón al iniciar
             txtBuscar.Focus();
+            dgvUsuarios.SelectionChanged += dgvUsuarios_SelectionChanged;
         }
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
@@ -24,6 +25,16 @@ namespace frmSistemaReserva.InterfazUsuario
             btnModificar.Enabled = false;
             btnBloquear.Visible = false;
         }
+
+        private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        {
+            // Si no estamos en modo edición, desactivamos los campos
+            if (!btnEditar.Visible)
+            {
+                LimpiarCampos();
+            }
+        }
+
 
 
         private void ActualizarListaUsuarios()
@@ -113,25 +124,9 @@ namespace frmSistemaReserva.InterfazUsuario
                     {
                         btnBloquear.Text = "Desbloquear";
                     }
-
-                    // Hacer visible el botón de bloquear/desbloquear
-                    btnBloquear.Visible = true;
-
-                    // Habilitar campos para modificar excepto el nombre de usuario
-                    txtUsuarioNombre.Enabled = true;
-                    txtUsuarioApellido.Enabled = true;
-                    txtCorreo.Enabled = true;
-                    txtUsuario.Enabled = false; // Nombre de Usuario no editable al modificar
-                    txtClave.Enabled = true; // Clave se puede modificar si es necesario
-                    cmbRolUsuario.Enabled = true;
-
-                    // Configurar botones
-                    btnAgregar.Enabled = false;
-                    btnModificar.Enabled = true;
-                    btnEliminar.Enabled = true;
-                    btnCancelar.Enabled = true;
-                    btnNuevo.Enabled = false; // Deshabilitar el botón Nuevo mientras se edita un usuario
-
+                    
+                    // Mostramos el boton editar
+                    btnEditar.Visible = true;
                 }
             }
 
@@ -163,10 +158,11 @@ namespace frmSistemaReserva.InterfazUsuario
             btnModificar.Enabled = false;
             btnEliminar.Enabled = false;
             btnCancelar.Enabled = false;
-            btnNuevo.Enabled = true; // Solo habilitar el botón Nuevo
+            btnNuevo.Enabled = true;
 
-            // Ocultar el botón de bloquear/desbloquear
+            // Ocultar el botón de bloquear/desbloquear y editar
             btnBloquear.Visible = false;
+            btnEditar.Visible = false;
         }
 
 
@@ -375,6 +371,16 @@ namespace frmSistemaReserva.InterfazUsuario
             {
                 MessageBox.Show("Seleccione un usuario para bloquear/desbloquear.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            activar();
+            btnEditar.Visible = false;
+            btnAgregar.Enabled = false;
+            btnModificar.Enabled = true;
+            btnEliminar.Enabled = true;
+            btnBloquear.Visible = true;
         }
     }
 }
