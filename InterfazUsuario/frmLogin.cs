@@ -39,7 +39,7 @@ namespace frmSistemaReserva
                 MessageBox.Show("Inicio de sesión exitoso", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Abrir el formulario principal y pasar el rol del usuario
-                frmPrincipal formPrincipal = new frmPrincipal(result.rol, result.nombreCompleto);
+                frmPrincipal formPrincipal = new frmPrincipal(result.idUsuario, result.rol, result.nombreCompleto);
                 this.Hide();
                 formPrincipal.ShowDialog();
             }

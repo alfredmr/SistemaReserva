@@ -1,4 +1,5 @@
-﻿using System;
+﻿using frmSistemaReserva.Modelos;
+using System;
 using System.Windows.Forms;
 namespace frmSistemaReserva.InterfazUsuario
 {
@@ -6,11 +7,13 @@ namespace frmSistemaReserva.InterfazUsuario
     {
         private string rolUsuario;
         private string usuarioActual;
-        public frmPrincipal( string rol, string nombreCompleto)
+        private int idUsuario;
+        public frmPrincipal(int idUsuario, string rol, string nombreCompleto)
         {
             InitializeComponent();
             this.rolUsuario = rol;
             this.usuarioActual = nombreCompleto;
+            this.idUsuario = idUsuario;
         }
 
         private void frmPrincipal_Load(object sender, EventArgs e)
@@ -38,6 +41,12 @@ namespace frmSistemaReserva.InterfazUsuario
             frmLogin loginForm = new frmLogin();
             loginForm.Show();
             this.Close();
+        }
+
+        private void btnReservas_Click(object sender, EventArgs e)
+        {
+            frmReservas formReservas = new frmReservas();
+            formReservas.ShowDialog(this);
         }
     }
 }

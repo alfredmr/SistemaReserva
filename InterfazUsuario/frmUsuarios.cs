@@ -10,6 +10,7 @@ namespace frmSistemaReserva.InterfazUsuario
 {
     public partial class frmUsuarios : Form
     {
+        Conexion dbHelper = new Conexion();
         public frmUsuarios()
         {
             InitializeComponent();
@@ -35,14 +36,10 @@ namespace frmSistemaReserva.InterfazUsuario
             }
         }
 
-
-
         private void ActualizarListaUsuarios()
         {
-            Conexion dbHelper = new Conexion();
             List<Usuario> usuarios = dbHelper.ObtenerUsuarios();
 
-            // Asignar la lista de usuarios al DataGridView
             dgvUsuarios.AutoGenerateColumns = true;  // Habilitar la generación automática de columnas
             dgvUsuarios.DataSource = usuarios;       // Asignar la lista de usuarios al DataGridView
             dgvUsuarios.Refresh();                   // Refrescar el DataGridView
@@ -70,8 +67,6 @@ namespace frmSistemaReserva.InterfazUsuario
                 return;
             }
 
-            // Insertar usuario en la base de datos utilizando el procedimiento almacenado
-            Conexion dbHelper = new Conexion();
             try
             {
                 dbHelper.InsertarUsuarioConSP(nuevoUsuario);
@@ -164,8 +159,8 @@ namespace frmSistemaReserva.InterfazUsuario
             btnBloquear.Visible = false;
             btnEditar.Visible = false;
         }
-
-
+        
+        
         private void activar()
         {
             // Habilitar todos los campos para agregar un nuevo usuario
@@ -175,7 +170,7 @@ namespace frmSistemaReserva.InterfazUsuario
             txtUsuario.Enabled = true; // Nombre de usuario debe ser editable cuando se agrega uno nuevo
             txtClave.Enabled = true;
             cmbRolUsuario.Enabled = true;
-
+            
             // Configurar botones
             btnAgregar.Enabled = true;
             btnCancelar.Enabled = true;
@@ -213,8 +208,6 @@ namespace frmSistemaReserva.InterfazUsuario
                     return;
                 }
 
-                // Llamar al método para actualizar el usuario en la base de datos
-                Conexion dbHelper = new Conexion();
                 try
                 {
                     dbHelper.ActualizarUsuarioConSP(usuarioModificado);
@@ -273,10 +266,8 @@ namespace frmSistemaReserva.InterfazUsuario
                 DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar este usuario?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (resultado == DialogResult.Yes)
                 {
-                    // Eliminar el usuario de la base de datos
-                    Conexion dbHelper = new Conexion();
                     try
-                    {
+                    {   
                         dbHelper.EliminarUsuarioConSP(idUsuario);
                         MessageBox.Show("Usuario eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -311,7 +302,6 @@ namespace frmSistemaReserva.InterfazUsuario
             }
             else
             {
-                Conexion dbHelper = new Conexion();
                 List<Usuario> usuarios = dbHelper.ObtenerUsuarios();
 
                 // Filtrar la lista de usuarios basada en el criterio
@@ -343,7 +333,6 @@ namespace frmSistemaReserva.InterfazUsuario
                 int idUsuario = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
                 string estadoActual = dgvUsuarios.CurrentRow.Cells["estado"].Value.ToString();
 
-                Conexion dbHelper = new Conexion();
                 try
                 {
                     // Cambiar el estado del usuario

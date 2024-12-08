@@ -765,6 +765,105 @@ BEGIN
 END;
 GO
 
+
+-- obtener lista dui
+CREATE PROCEDURE ObtenerListaDuiClientes
+AS
+BEGIN
+    SELECT idCliente, nNumeroIdentificacion FROM Clientes;
+END
+GO
+
+-- Obtener lista de DUI de clientes
+CREATE OR ALTER PROCEDURE ObtenerListaDuiClientes
+AS
+BEGIN
+    BEGIN TRY
+        -- Realizar la consulta
+        SELECT idCliente, nNumeroIdentificacion FROM Clientes;
+
+        -- Insertar en logs la acción realizada
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('INFO', 'Consulta de lista de DUIs de clientes realizada exitosamente.', NULL);
+    END TRY
+    BEGIN CATCH
+        -- Manejar errores y registrar en logs
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('ERROR', 'Error al consultar lista de DUIs de clientes.', 
+                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+
+        -- Relanzar el error
+        THROW;
+    END CATCH
+END;
+GO
+
+-- Obtener número de habitaciones
+CREATE OR ALTER PROCEDURE ObtenerNumeroHabitaciones
+AS
+BEGIN
+    BEGIN TRY
+        -- Realizar la consulta
+        SELECT IdHabitacion, numeroHabitacion FROM Habitaciones;
+
+        -- Insertar en logs la acción realizada
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('INFO', 'Consulta de número de habitaciones realizada exitosamente.', NULL);
+    END TRY
+    BEGIN CATCH
+        -- Manejar errores y registrar en logs
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('ERROR', 'Error al consultar número de habitaciones.', 
+                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+
+        -- Relanzar el error
+        THROW;
+    END CATCH
+END;
+GO
+
+-- Eliminar reserva
+CREATE OR ALTER PROCEDURE EliminarReserva
+    @IdReserva INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        -- Verificar si existe el registro antes de eliminarlo
+        IF EXISTS (SELECT 1 FROM Reservas WHERE IdReserva = @IdReserva)
+        BEGIN
+            -- Eliminar la reserva
+            DELETE FROM Reservas WHERE IdReserva = @IdReserva;
+
+            -- Insertar en logs la acción realizada
+            INSERT INTO Logs (Tipo, Mensaje, Detalle)
+            VALUES ('INFO', 'Reserva eliminada exitosamente.', CONCAT('ID Reserva: ', @IdReserva));
+
+            PRINT 'El registro ha sido eliminado correctamente.';
+        END
+        ELSE
+        BEGIN
+            -- Insertar en logs el intento fallido
+            INSERT INTO Logs (Tipo, Mensaje, Detalle)
+            VALUES ('WARNING', 'Intento de eliminar una reserva inexistente.', CONCAT('ID Reserva: ', @IdReserva));
+
+            PRINT 'El registro no existe.';
+        END
+    END TRY
+    BEGIN CATCH
+        -- Manejar errores y registrar en logs
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('ERROR', 'Error al intentar eliminar reserva.', 
+                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+
+        -- Relanzar el error
+        THROW;
+    END CATCH
+END;
+GO
+
+
 -- Eliminar el job si ya existe
 USE msdb;
 GO

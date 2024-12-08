@@ -180,6 +180,7 @@
             this.btnReservas.Size = new System.Drawing.Size(100, 100);
             this.btnReservas.TabIndex = 8;
             this.btnReservas.UseVisualStyleBackColor = true;
+            this.btnReservas.Click += new System.EventHandler(this.btnReservas_Click);
             // 
             // lblReservas
             // 
