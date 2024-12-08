@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using frmSistemaReserva.AccesoDatos;
 using frmSistemaReserva.Modelos;
@@ -17,9 +11,11 @@ namespace frmSistemaReserva.InterfazUsuario
     {
         //private Reserva reserva = new Reserva();
         Conexion conexion = new Conexion();
-        public frmReservas()
+        private int idUsuario;
+        public frmReservas(int idUsuario)
         {
-            InitializeComponent();           
+            InitializeComponent();
+            this.idUsuario = idUsuario;
         }
 
         private void frmReservas_Load(object sender, EventArgs e)
@@ -147,7 +143,7 @@ namespace frmSistemaReserva.InterfazUsuario
             {
                 IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
                 IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
-                IdUsuario = 4,
+                IdUsuario = idUsuario,
                 FechaInicio = dtpFechaInicioReserva.Value,
                 FechaFin = dtpFechaFinReserva.Value,
             };

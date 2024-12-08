@@ -45,7 +45,7 @@ namespace frmSistemaReserva.InterfazUsuario
 
         private void btnReservas_Click(object sender, EventArgs e)
         {
-            frmReservas formReservas = new frmReservas();
+            frmReservas formReservas = new frmReservas(idUsuario);
             formReservas.ShowDialog(this);
         }
     }
