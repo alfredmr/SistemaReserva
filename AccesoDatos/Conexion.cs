@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using frmSistemaReserva.Modelos;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace frmSistemaReserva.AccesoDatos
 {
