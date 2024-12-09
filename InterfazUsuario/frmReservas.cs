@@ -103,28 +103,6 @@ namespace frmSistemaReserva.InterfazUsuario
             }
         }
 
-        /*
-        private void CargarListaNumeroHabitacion()
-        {
-            //Reserva listaNumero = new Reserva();
-            cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
-            cboNumeroHabitacion.ValueMember = "IdHabitacion";
-            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
-
-            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
-            cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
-            {
-                if (cboNumeroHabitacion.SelectedIndex >= 0)
-                {
-                    DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
-                    txtTipoHabitacion.Text = row["tipo"].ToString();
-                    // Almacena el precio por noche en el control (puede ser en el Tag).
-                    txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
-
-                }
-            };
-        }*/
-
         private void CargarHabitacionesEnListBox()
         {
             try
@@ -278,63 +256,6 @@ namespace frmSistemaReserva.InterfazUsuario
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        /*
-        private void btnGuardarReserva_Click(object sender, EventArgs e)
-        {
-            // Crear un nuevo usuario con los datos ingresados en el formulario
-            Reserva nuevaReserva = new Reserva()
-            {
-                IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
-                Cliente = txtNombreCliente.Text.Trim(),
-                IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
-                Habitacion = txtTipoHabitacion.Text.Trim(),
-                IdUsuario = idUsuario,
-                FechaInicio = dtpFechaInicioReserva.Value,
-                FechaFin = dtpFechaFinReserva.Value,
-            }; 
-
-            // Validación de campos vacíos
-            if (cboDuiClientes.SelectedValue == null || cboNumeroHabitacion.SelectedValue == null ||
-                string.IsNullOrEmpty(nuevaReserva.Cliente) || string.IsNullOrEmpty(nuevaReserva.Habitacion))
-            {
-                MessageBox.Show("Por favor, complete todos los campos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (dtpFechaInicioReserva.Value.Date >= dtpFechaFinReserva.Value.Date)
-            {
-                MessageBox.Show("La fecha de inicio no puede ser posterior o igual a la fecha de fin.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                Conexion dbHelper = new Conexion();
-                dbHelper.InsertarReservaConSP(nuevaReserva);
-                MessageBox.Show("Reserva agregada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Refrescar lista y limpiar campos
-                CargarListaNumeroHabitacion();
-                DesactivarBotones();
-                CargarReservas();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 50001 || ex.Number == 50003)
-                {
-                    MessageBox.Show("La reserva contiene datos que no existen.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }*/
 
         private void btnEliminarReserva_Click(object sender, EventArgs e)
         {
@@ -518,5 +439,41 @@ namespace frmSistemaReserva.InterfazUsuario
                 MessageBox.Show("Seleccione una reserva para modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void btnBuscarReserva_Click(object sender, EventArgs e)
+        {
+            string criterio = txtBuscarReserva.Text.Trim().ToLower();
+            if (string.IsNullOrEmpty(criterio))
+            {
+                CargarReservas(); // Mostrar todos si no se proporciona criterio de búsqueda
+            }
+            else
+            {
+                List<viewReserva> reservas = conexion.ObtenerReservas();
+
+                // Filtrar la lista de reservas basada en el criterio
+                var reservaFiltrada = reservas.Where(u =>
+                    u.Cliente.ToLower().Contains(criterio) ||
+                    u.Dui.ToLower().Contains(criterio) ||
+                    u.tipoHabitación.ToLower().Contains(criterio) ||
+                    u.Habitacion.ToString().ToLower().Contains(criterio) ||
+                    u.precioPorNoche.ToString().ToLower().Contains(criterio) ||
+                    u.tipoDivisa.ToString().ToLower().Contains(criterio)).ToList();
+            
+            
+            if (reservaFiltrada.Any())
+            {
+                // Asignar los resultados filtrados al DataGridView
+                dgvReservas.DataSource = reservaFiltrada.ToList();
+            }
+            else
+            {
+                MessageBox.Show("No hay resultados con su búsqueda.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtBuscarReserva.Text = "";
+                CargarReservas();
+            }
+            dgvReservas.Refresh();
+        }
+}
     }
 }
