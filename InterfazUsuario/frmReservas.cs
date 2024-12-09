@@ -71,7 +71,39 @@ namespace frmSistemaReserva.InterfazUsuario
                 }
             };
         }
+        private void CargarListaNumeroHabitacion()
+        {
+            // Filtrar habitaciones disponibles (no ocupadas)
+            DataTable habitaciones = conexion.ListarNumeroHabitaciones();
 
+            if (habitaciones != null && habitaciones.Rows.Count > 0) // Validar que haya resultados
+            {
+                cboNumeroHabitacion.DataSource = habitaciones;
+                cboNumeroHabitacion.ValueMember = "IdHabitacion";
+                cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
+
+                // Evento para actualizar el tipo de habitación y el precio al seleccionar una habitación
+                cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
+                {
+                    if (cboNumeroHabitacion.SelectedIndex >= 0)
+                    {
+                        DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
+
+                        // Actualizar el tipo de habitación en un TextBox
+                        txtTipoHabitacion.Text = row["tipo"].ToString();
+
+                        // Guardar el precio por noche en el Tag (o actualizar otro control si es necesario)
+                        txtTipoHabitacion.Tag = row["precioPorNoche"];
+                    }
+                };
+            }
+            else
+            {
+                MessageBox.Show("No hay habitaciones disponibles para mostrar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        /*
         private void CargarListaNumeroHabitacion()
         {
             //Reserva listaNumero = new Reserva();
@@ -86,9 +118,12 @@ namespace frmSistemaReserva.InterfazUsuario
                 {
                     DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
                     txtTipoHabitacion.Text = row["tipo"].ToString();
+                    // Almacena el precio por noche en el control (puede ser en el Tag).
+                    txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
+
                 }
             };
-        }
+        }*/
 
         private void CargarHabitacionesEnListBox()
         {

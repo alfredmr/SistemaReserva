@@ -19,7 +19,7 @@ namespace frmSistemaReserva.Modelos
         {
             get
             {
-                return (FechaFin - FechaInicio).Days;
+                return (FechaInicio < FechaFin) ? (FechaFin - FechaInicio).Days : 0;
             }
         }
 
