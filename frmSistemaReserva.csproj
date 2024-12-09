@@ -53,6 +53,12 @@
     <Compile Include="InterfazUsuario\frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="InterfazUsuario\frmNuevoPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InterfazUsuario\frmNuevoPago.Designer.cs">
+      <DependentUpon>frmNuevoPago.cs</DependentUpon>
+    </Compile>
     <Compile Include="InterfazUsuario\frmPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,12 +77,16 @@
     <Compile Include="InterfazUsuario\frmUsuarios.Designer.cs">
       <DependentUpon>frmUsuarios.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modelos\Pago.cs" />
     <Compile Include="Modelos\Reserva.cs" />
     <Compile Include="Modelos\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="InterfazUsuario\frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InterfazUsuario\frmNuevoPago.resx">
+      <DependentUpon>frmNuevoPago.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InterfazUsuario\frmPrincipal.resx">
       <DependentUpon>frmPrincipal.cs</DependentUpon>

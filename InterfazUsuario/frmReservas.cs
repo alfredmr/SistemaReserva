@@ -60,18 +60,32 @@ namespace frmSistemaReserva.InterfazUsuario
             cboDuiClientes.DataSource = conexion.ListarDuiClientes();
             cboDuiClientes.ValueMember = "idCliente";
             cboDuiClientes.DisplayMember = "nNumeroIdentificacion";
+
+            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
             cboDuiClientes.SelectedIndexChanged += (sender, e) =>
             {
                 if (cboDuiClientes.SelectedIndex >= 0)
                 {
-                    // Obtener el idCliente seleccionado
-                    int idSeleccionado = (int)cboDuiClientes.SelectedValue;
+                    DataRowView row = (DataRowView)cboDuiClientes.SelectedItem;
+                    txtNombreCliente.Text = row["nombreCompleto"].ToString();
+                }
+            };
+        }
 
-                    // Obtener el nombre completo del cliente seleccionado
-                    string nombreCompleto = conexion.ObtenerNombreporId(idSeleccionado);
+        private void CargarListaNumeroHabitacion()
+        {
+            //Reserva listaNumero = new Reserva();
+            cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
+            cboNumeroHabitacion.ValueMember = "IdHabitacion";
+            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
 
-                    // Asignar el nombre completo al TextBox
-                    txtNombreCliente.Text = nombreCompleto;
+            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
+            cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
+            {
+                if (cboNumeroHabitacion.SelectedIndex >= 0)
+                {
+                    DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
+                    txtTipoHabitacion.Text = row["tipo"].ToString();
                 }
             };
         }
@@ -124,30 +138,6 @@ namespace frmSistemaReserva.InterfazUsuario
             e.DrawFocusRectangle();
         }
 
-
-        private void CargarListaNumeroHabitacion()
-        {
-            //Reserva listaNumero = new Reserva();
-            cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
-            cboNumeroHabitacion.ValueMember = "IdHabitacion";
-            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
-            cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
-            {
-                if (cboNumeroHabitacion.SelectedIndex >= 0)
-                {
-                    // Obtener el idCliente seleccionado
-                    int idSeleccionado = (int)cboNumeroHabitacion.SelectedValue;
-
-                    // Obtener el nombre completo del cliente seleccionado
-                    string numeroHabitacion = conexion.ObtenerTipoPorId(idSeleccionado);
-
-                    // Asignar el nombre completo al TextBox
-                    txtTipoHabitacion.Text = numeroHabitacion;
-                }
-            };
-
-        }
-
         private void ActivarBotones()
         {
             btnCancelarReserva.Enabled = true;
@@ -195,7 +185,67 @@ namespace frmSistemaReserva.InterfazUsuario
             btnEditarReserva.Enabled = true;
         }
 
+        private void btnGuardarReserva_Click(object sender, EventArgs e)
+        {
+            // Crear una nueva reserva con los datos del formulario
+            Reserva nuevaReserva = new Reserva()
+            {
+                IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
+                Cliente = txtNombreCliente.Text.Trim(),
+                IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
+                Habitacion = txtTipoHabitacion.Text.Trim(),
+                IdUsuario = idUsuario,
+                FechaInicio = dtpFechaInicioReserva.Value,
+                FechaFin = dtpFechaFinReserva.Value,
+                PrecioPorNoche = Convert.ToDecimal(txtTipoHabitacion.Tag)
+            };
 
+            // Validación de campos vacíos
+            if (cboDuiClientes.SelectedValue == null || cboNumeroHabitacion.SelectedValue == null ||
+                string.IsNullOrEmpty(nuevaReserva.Cliente) || string.IsNullOrEmpty(nuevaReserva.Habitacion))
+            {
+                MessageBox.Show("Por favor, complete todos los campos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (dtpFechaInicioReserva.Value.Date >= dtpFechaFinReserva.Value.Date)
+            {
+                MessageBox.Show("La fecha de inicio no puede ser posterior o igual a la fecha de fin.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                Conexion dbHelper = new Conexion();
+                dbHelper.InsertarReservaConSP(nuevaReserva);
+                MessageBox.Show("Reserva agregada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                // Abrir el formulario de pagos
+                frmNuevoPago frmPago = new frmNuevoPago(
+                nuevaReserva.IdReserva = conexion.ObtenerUltimaReservaId(),
+                nuevaReserva.Cliente,
+                nuevaReserva.Habitacion,
+                nuevaReserva.CostoTotal);
+                frmPago.ShowDialog(this);
+
+                // Refrescar lista y limpiar campos
+                CargarListaNumeroHabitacion();
+                DesactivarBotones();
+                CargarReservas();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error al guardar la reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /*
         private void btnGuardarReserva_Click(object sender, EventArgs e)
         {
             // Crear un nuevo usuario con los datos ingresados en el formulario
@@ -233,10 +283,6 @@ namespace frmSistemaReserva.InterfazUsuario
                 CargarListaNumeroHabitacion();
                 DesactivarBotones();
                 CargarReservas();
-                /*
-                CargarListaNumeroHabitacion();
-                cboDuiClientes.Text = "Seleccione...";
-                cboNumeroHabitacion.Text = "Seleccione...";*/
             }
             catch (SqlException ex)
             {
@@ -253,7 +299,7 @@ namespace frmSistemaReserva.InterfazUsuario
             {
                 MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }*/
 
         private void btnEliminarReserva_Click(object sender, EventArgs e)
         {

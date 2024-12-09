@@ -9,9 +9,28 @@ namespace frmSistemaReserva.Modelos
         public string Cliente { get; set; }
         public int IdHabitacion { get; set; }
         public string Habitacion { get; set; }
+        public decimal PrecioPorNoche { get; set; }
         public int IdUsuario { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
+
+        // Propiedad calculada: número de días
+        public int NumeroDias
+        {
+            get
+            {
+                return (FechaFin - FechaInicio).Days;
+            }
+        }
+
+        // Propiedad calculada: costo total
+        public decimal CostoTotal
+        {
+            get
+            {
+                return NumeroDias * PrecioPorNoche;
+            }
+        }
 
     }
     internal class viewReserva

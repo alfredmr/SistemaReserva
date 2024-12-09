@@ -375,13 +375,13 @@ BEGIN
         WHERE IdHabitacion IN (
             SELECT IdHabitacion
             FROM Reservas
-            WHERE FechaFin < GETDATE() AND Estado = 'Ocupada'
+            WHERE FechaFin < GETDATE() AND Estado = 'Activa'
         );
 
         -- Cambiar estado de reservas finalizadas
         UPDATE Reservas
         SET Estado = 'Finalizada'
-        WHERE FechaFin < GETDATE() AND Estado = 'Ocupada';
+        WHERE FechaFin < GETDATE() AND Estado = 'Activa';
 
         -- Registrar en Logs
         INSERT INTO Logs (Tipo, Mensaje, Detalle)
@@ -808,7 +808,7 @@ AS
 BEGIN
     BEGIN TRY
         -- Realizar la consulta
-        SELECT idCliente, nNumeroIdentificacion FROM Clientes;
+        SELECT * FROM Clientes;
 
         -- Insertar en logs la acción realizada
         INSERT INTO Logs (Tipo, Mensaje, Detalle)

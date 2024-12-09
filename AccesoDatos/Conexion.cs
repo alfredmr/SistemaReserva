@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using frmSistemaReserva.Modelos;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace frmSistemaReserva.AccesoDatos
 {
@@ -292,7 +293,10 @@ namespace frmSistemaReserva.AccesoDatos
             }
         }
 
+
         /////////// Modulo reservas
+
+        // Método para insertar las raservas
         public void InsertarReservaConSP(Reserva reserva)
         {
             using (SqlConnection connection = ObtenerConexion())
@@ -325,6 +329,7 @@ namespace frmSistemaReserva.AccesoDatos
             }
         }
 
+        // Método para visualizar reservas
         public List<viewReserva> ObtenerReservas()
         {
             List<viewReserva> viewReservas = new List<viewReserva>();
@@ -376,6 +381,7 @@ namespace frmSistemaReserva.AccesoDatos
             return viewReservas;
         }
 
+        // Método para obtener los DUI de los clientes
         public DataTable ListarDuiClientes()
         {
             SqlDataReader lista;
@@ -402,37 +408,6 @@ namespace frmSistemaReserva.AccesoDatos
             }
         }
 
-        public string ObtenerNombreporId(int idSeleccionado)
-        {
-            string nombreCliente = " ";
-
-            // Usar una consulta directa para obtener el nombre del cliente
-            using (SqlConnection connection = ObtenerConexion())
-            {
-                try
-                {
-                    connection.Open();
-                    SqlCommand comando = new SqlCommand("SELECT nombreCompleto FROM Clientes WHERE idCliente = @IdCliente", connection);
-                    comando.Parameters.AddWithValue("@IdCliente", idSeleccionado);
-
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            nombreCliente = reader.GetString(reader.GetOrdinal("nombreCompleto"));
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error al obtener nombre: " + ex.Message);
-                    throw;
-                }
-            }
-
-            return nombreCliente;
-        }
-
         public DataTable ListarNumeroHabitaciones()
         {
             SqlDataReader lista;
@@ -457,37 +432,6 @@ namespace frmSistemaReserva.AccesoDatos
                 }
 
             }
-        }
-
-        public string ObtenerTipoPorId(int idSeleccionado)
-        {
-            string nombreCliente = " ";
-
-            // Usar una consulta directa para obtener el nombre del cliente
-            using (SqlConnection connection = ObtenerConexion())
-            {
-                try
-                {
-                    connection.Open();
-                    SqlCommand comando = new SqlCommand("SELECT tipo FROM Habitaciones WHERE IdHabitacion = @IdHabitacion", connection);
-                    comando.Parameters.AddWithValue("@IdHabitacion", idSeleccionado);
-
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            nombreCliente = reader.GetString(reader.GetOrdinal("tipo"));
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error al obtener el tipo: " + ex.Message);
-                    throw;
-                }
-            }
-
-            return nombreCliente;
         }
 
         public void EliminarReservaConSP(int idReserva)
@@ -555,5 +499,61 @@ namespace frmSistemaReserva.AccesoDatos
                 }
             }
         }
+
+        public int ObtenerUltimaReservaId()
+        {
+            using (SqlConnection connection = ObtenerConexion())
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT MAX(IdReserva) FROM Reservas";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        return Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al obtener la última reserva: " + ex.Message);
+                    throw;
+                }
+            }
+        }
+
+
+        public void InsertarPagoConSP(Pago pago)
+        {
+            using (SqlConnection connection = ObtenerConexion())
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Crear el comando para llamar al procedimiento almacenado
+                    using (SqlCommand command = new SqlCommand("InsertarPago", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Agregar parámetros para el procedimiento almacenado
+                        command.Parameters.AddWithValue("@IdReserva", pago.IdReserva);
+                        command.Parameters.AddWithValue("@Monto", pago.Monto);
+                        command.Parameters.AddWithValue("@FechaPago", pago.FechaPago);
+                        command.Parameters.AddWithValue("@MetodoPago", pago.MetodoPago);
+                        command.Parameters.AddWithValue("@TipoDivisa", pago.TipoDivisa);
+
+                        // Ejecutar el comando
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al registrar el pago: " + ex.Message);
+                    throw; // Relanzar la excepción para manejarla en el formulario
+                }
+            }
+        }
+
     }
 }
