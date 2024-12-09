@@ -112,10 +112,11 @@ GO
 -- Insertar registros iniciales en Clientes
 -- Insertar registros iniciales
 -- adminpass
+-- empleado 1234
 INSERT INTO Usuarios (usuario_nombre, usuario_apellido, correo, usuario, clave, rolUsuario) VALUES
 ('Admin', 'Sistema', 'admin@example.com', 'admin', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', 'Administrador'),
 ('Alfredo', 'Medina', '290712022@mail.utec.edu.sv', 'amedina', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', 'Administrador'),
-('Empleado', '1', 'empleado@mail.com', 'empleado', 'b521cb27aba549535f0125f12eac2ed9ab4cc38bd8b236e5c99adc9a4cd818b1', 'Empleado');
+('Empleado', '1', 'empleado@mail.com', 'empleado', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Empleado');
 
 INSERT INTO Clientes (nNumeroIdentificacion, nombreCompleto, telefono, correo) VALUES 
 ('12345678-1', 'Juan Pérez', '123456789', 'juan.perez@example.com'),
@@ -189,6 +190,41 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER TRIGGER trg_ActualizarEstadoHabitacion
+ON Reservas
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    BEGIN TRY
+        -- Actualizar las habitaciones a "No Disponible" si están reservadas en Reservas activas
+        UPDATE Habitaciones
+        SET estado = 'Ocupada'
+        WHERE IdHabitacion IN (
+            SELECT DISTINCT IdHabitacion
+            FROM Reservas
+            WHERE Estado = 'Activa'
+        );
+
+        -- Actualizar las habitaciones a "Disponible" si ya no tienen reservas activas
+        UPDATE Habitaciones
+        SET estado = 'Disponible'
+        WHERE IdHabitacion NOT IN (
+            SELECT DISTINCT IdHabitacion
+            FROM Reservas
+            WHERE Estado = 'Activa'
+        );
+    END TRY
+    BEGIN CATCH
+        -- Manejar errores
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('ERROR', 'Error en trg_ActualizarEstadoHabitacion.', 
+                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+        THROW;
+    END CATCH
+END;
+GO
+
+
 CREATE OR ALTER TRIGGER trg_RegistrarPagoPendiente
 ON Reservas
 AFTER INSERT
@@ -244,18 +280,19 @@ BEGIN
         END;
     END TRY
     BEGIN CATCH
-        -- Validar si hay transacción activa antes de hacer rollback
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
+    -- Validar si hay transacción activa antes de hacer rollback
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
 
-        -- Registrar detalles del error
-        INSERT INTO Logs (Tipo, Mensaje, Detalle)
-        VALUES ('ERROR', 'Error en trg_ValidarFechasReserva.',
-                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+    -- Registro detallado del error
+    INSERT INTO Logs (Tipo, Mensaje, Detalle)
+    VALUES ('ERROR', 'Error al insertar reserva.', 
+            CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
 
-        -- Relanzar el error
-        THROW;
-    END CATCH;
+    -- Relanzar el error
+    THROW;
+END CATCH
+
 END;
 GO
 
@@ -338,13 +375,13 @@ BEGIN
         WHERE IdHabitacion IN (
             SELECT IdHabitacion
             FROM Reservas
-            WHERE FechaFin < GETDATE() AND Estado = 'Activa'
+            WHERE FechaFin < GETDATE() AND Estado = 'Ocupada'
         );
 
         -- Cambiar estado de reservas finalizadas
         UPDATE Reservas
         SET Estado = 'Finalizada'
-        WHERE FechaFin < GETDATE() AND Estado = 'Activa';
+        WHERE FechaFin < GETDATE() AND Estado = 'Ocupada';
 
         -- Registrar en Logs
         INSERT INTO Logs (Tipo, Mensaje, Detalle)
@@ -535,7 +572,7 @@ BEGIN
         -- Registro en logs
         INSERT INTO Logs (Tipo, Mensaje, Detalle)
         VALUES ('INFO', 'Reserva creada exitosamente.', 
-                CONCAT('Cliente: ', @IdCliente, ', Habitación: ', @IdHabitacion));
+                CONCAT('Cliente: ', @IdCliente, ', Habitación: ', @IdHabitacion, ', Por: ', @idusuario));
 
         COMMIT TRANSACTION;
     END TRY
@@ -726,7 +763,7 @@ END;
 
 GO
 
--- 1q bloquear usuario
+-- 11 bloquear usuario
 CREATE OR ALTER PROCEDURE EliminarUsuario
     @Idusuario INT
 AS
@@ -765,15 +802,6 @@ BEGIN
 END;
 GO
 
-
--- obtener lista dui
-CREATE PROCEDURE ObtenerListaDuiClientes
-AS
-BEGIN
-    SELECT idCliente, nNumeroIdentificacion FROM Clientes;
-END
-GO
-
 -- Obtener lista de DUI de clientes
 CREATE OR ALTER PROCEDURE ObtenerListaDuiClientes
 AS
@@ -804,7 +832,7 @@ AS
 BEGIN
     BEGIN TRY
         -- Realizar la consulta
-        SELECT IdHabitacion, numeroHabitacion FROM Habitaciones;
+        SELECT * FROM Habitaciones;
 
         -- Insertar en logs la acción realizada
         INSERT INTO Logs (Tipo, Mensaje, Detalle)
@@ -862,6 +890,80 @@ BEGIN
     END CATCH
 END;
 GO
+
+--modificar reserva
+
+CREATE OR ALTER PROCEDURE ModificarReserva
+    @IdReserva INT,
+    @IdCliente INT,
+    @IdHabitacion INT,
+    @idusuario INT,
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validar si la reserva existe
+        IF NOT EXISTS (SELECT 1 FROM Reservas WHERE IdReserva = @IdReserva)
+            THROW 50001, 'La reserva no existe.', 1;
+
+        -- Validar si el cliente existe
+        IF NOT EXISTS (SELECT 1 FROM Clientes WHERE idCliente = @IdCliente)
+            THROW 50002, 'El cliente no existe.', 1;
+
+        -- Validar si la habitación está disponible para las fechas proporcionadas
+        IF EXISTS (
+            SELECT 1
+            FROM Reservas
+            WHERE IdHabitacion = @IdHabitacion
+              AND IdReserva <> @IdReserva -- Excluir la misma reserva
+              AND Estado = 'Activa'
+              AND (
+                  @FechaInicio BETWEEN FechaInicio AND FechaFin OR
+                  @FechaFin BETWEEN FechaInicio AND FechaFin OR
+                  (FechaInicio <= @FechaInicio AND FechaFin >= @FechaFin)
+              )
+        )
+            THROW 50003, 'La habitación no está disponible para las fechas seleccionadas.', 1;
+
+        -- Actualizar la reserva
+        UPDATE Reservas
+        SET IdCliente = @IdCliente,
+            IdHabitacion = @IdHabitacion,
+            idusuario = @idusuario,
+            FechaInicio = @FechaInicio,
+            FechaFin = @FechaFin,
+            fechaRegistro = GETDATE()
+        WHERE IdReserva = @IdReserva;
+
+        -- Registrar en logs el éxito de la modificación
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('INFO', 'Reserva modificada exitosamente.', 
+                CONCAT('ID Reserva: ', @IdReserva, ', Cliente: ', @IdCliente, 
+                       ', Habitación: ', @IdHabitacion, ', Fechas: ', 
+                       @FechaInicio, ' a ', @FechaFin));
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        -- Registrar error en logs
+        INSERT INTO Logs (Tipo, Mensaje, Detalle)
+        VALUES ('ERROR', 'Error al modificar reserva.', 
+                CONCAT(ERROR_MESSAGE(), ' en la línea ', ERROR_LINE()));
+
+        -- Relanzar el error
+        THROW;
+    END CATCH
+END;
+GO
+
+
+
 
 
 -- Eliminar el job si ya existe

@@ -45,15 +45,16 @@
             this.dtpFechaInicioReserva = new System.Windows.Forms.DateTimePicker();
             this.dtpFechaFinReserva = new System.Windows.Forms.DateTimePicker();
             this.grpDatosReserva = new System.Windows.Forms.GroupBox();
+            this.btnListoEditar = new System.Windows.Forms.Button();
             this.lblFechaFinReserva = new System.Windows.Forms.Label();
             this.btnEditarReserva = new System.Windows.Forms.Button();
             this.lblFechaInicioReserva = new System.Windows.Forms.Label();
             this.btnEliminarReserva = new System.Windows.Forms.Button();
-            this.btnGuardarREserva = new System.Windows.Forms.Button();
+            this.btnGuardarReserva = new System.Windows.Forms.Button();
             this.btnCancelarReserva = new System.Windows.Forms.Button();
             this.btnSalirfrmReservas = new System.Windows.Forms.Button();
             this.grpHabitacionesDeMotel = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lbHabitaciones = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvReservas)).BeginInit();
             this.grpDatosCliente.SuspendLayout();
             this.grpDatosHabitacion.SuspendLayout();
@@ -69,8 +70,12 @@
             this.dgvReservas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvReservas.Location = new System.Drawing.Point(44, 455);
             this.dgvReservas.Name = "dgvReservas";
+            this.dgvReservas.ReadOnly = true;
             this.dgvReservas.Size = new System.Drawing.Size(964, 106);
             this.dgvReservas.TabIndex = 0;
+            this.dgvReservas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReservas_CellClick);
+            this.dgvReservas.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReservas_CellClick);
+            this.dgvReservas.SelectionChanged += new System.EventHandler(this.dgvReservas_SelectionChanged);
             // 
             // txtBuscarReserva
             // 
@@ -92,7 +97,7 @@
             // 
             // txtNombreCliente
             // 
-            this.txtNombreCliente.Location = new System.Drawing.Point(168, 113);
+            this.txtNombreCliente.Location = new System.Drawing.Point(126, 116);
             this.txtNombreCliente.Name = "txtNombreCliente";
             this.txtNombreCliente.Size = new System.Drawing.Size(152, 26);
             this.txtNombreCliente.TabIndex = 3;
@@ -109,7 +114,7 @@
             // cboDuiClientes
             // 
             this.cboDuiClientes.FormattingEnabled = true;
-            this.cboDuiClientes.Location = new System.Drawing.Point(168, 53);
+            this.cboDuiClientes.Location = new System.Drawing.Point(126, 38);
             this.cboDuiClientes.Name = "cboDuiClientes";
             this.cboDuiClientes.Size = new System.Drawing.Size(152, 28);
             this.cboDuiClientes.TabIndex = 5;
@@ -160,8 +165,6 @@
             // 
             // grpDatosCliente
             // 
-            this.grpDatosCliente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpDatosCliente.Controls.Add(this.txtNombreCliente);
             this.grpDatosCliente.Controls.Add(this.label1);
             this.grpDatosCliente.Controls.Add(this.cboDuiClientes);
@@ -169,7 +172,7 @@
             this.grpDatosCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpDatosCliente.Location = new System.Drawing.Point(44, 22);
             this.grpDatosCliente.Name = "grpDatosCliente";
-            this.grpDatosCliente.Size = new System.Drawing.Size(363, 165);
+            this.grpDatosCliente.Size = new System.Drawing.Size(320, 165);
             this.grpDatosCliente.TabIndex = 13;
             this.grpDatosCliente.TabStop = false;
             this.grpDatosCliente.Text = "Datos del cliente";
@@ -191,7 +194,7 @@
             this.grpDatosHabitacion.Controls.Add(this.lblNumeroHabitacion);
             this.grpDatosHabitacion.Controls.Add(this.cboNumeroHabitacion);
             this.grpDatosHabitacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpDatosHabitacion.Location = new System.Drawing.Point(478, 22);
+            this.grpDatosHabitacion.Location = new System.Drawing.Point(374, 22);
             this.grpDatosHabitacion.Name = "grpDatosHabitacion";
             this.grpDatosHabitacion.Size = new System.Drawing.Size(363, 165);
             this.grpDatosHabitacion.TabIndex = 14;
@@ -214,13 +217,12 @@
             // 
             // grpDatosReserva
             // 
-            this.grpDatosReserva.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpDatosReserva.Controls.Add(this.btnListoEditar);
             this.grpDatosReserva.Controls.Add(this.lblFechaFinReserva);
             this.grpDatosReserva.Controls.Add(this.btnEditarReserva);
             this.grpDatosReserva.Controls.Add(this.lblFechaInicioReserva);
             this.grpDatosReserva.Controls.Add(this.btnEliminarReserva);
-            this.grpDatosReserva.Controls.Add(this.btnGuardarREserva);
+            this.grpDatosReserva.Controls.Add(this.btnGuardarReserva);
             this.grpDatosReserva.Controls.Add(this.btnCancelarReserva);
             this.grpDatosReserva.Controls.Add(this.btnNuevaReserva);
             this.grpDatosReserva.Controls.Add(this.dtpFechaInicioReserva);
@@ -228,10 +230,20 @@
             this.grpDatosReserva.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpDatosReserva.Location = new System.Drawing.Point(44, 209);
             this.grpDatosReserva.Name = "grpDatosReserva";
-            this.grpDatosReserva.Size = new System.Drawing.Size(797, 177);
+            this.grpDatosReserva.Size = new System.Drawing.Size(693, 177);
             this.grpDatosReserva.TabIndex = 17;
             this.grpDatosReserva.TabStop = false;
             this.grpDatosReserva.Text = "Datos reserva";
+            // 
+            // btnListoEditar
+            // 
+            this.btnListoEditar.Location = new System.Drawing.Point(524, 36);
+            this.btnListoEditar.Name = "btnListoEditar";
+            this.btnListoEditar.Size = new System.Drawing.Size(93, 40);
+            this.btnListoEditar.TabIndex = 22;
+            this.btnListoEditar.Text = "Listo";
+            this.btnListoEditar.UseVisualStyleBackColor = true;
+            this.btnListoEditar.Click += new System.EventHandler(this.btnListoEditar_Click);
             // 
             // lblFechaFinReserva
             // 
@@ -244,12 +256,13 @@
             // 
             // btnEditarReserva
             // 
-            this.btnEditarReserva.Location = new System.Drawing.Point(455, 36);
+            this.btnEditarReserva.Location = new System.Drawing.Point(326, 36);
             this.btnEditarReserva.Name = "btnEditarReserva";
             this.btnEditarReserva.Size = new System.Drawing.Size(93, 40);
             this.btnEditarReserva.TabIndex = 21;
             this.btnEditarReserva.Text = "Editar";
             this.btnEditarReserva.UseVisualStyleBackColor = true;
+            this.btnEditarReserva.Click += new System.EventHandler(this.btnEditarReserva_Click);
             // 
             // lblFechaInicioReserva
             // 
@@ -262,7 +275,7 @@
             // 
             // btnEliminarReserva
             // 
-            this.btnEliminarReserva.Location = new System.Drawing.Point(588, 36);
+            this.btnEliminarReserva.Location = new System.Drawing.Point(425, 36);
             this.btnEliminarReserva.Name = "btnEliminarReserva";
             this.btnEliminarReserva.Size = new System.Drawing.Size(93, 40);
             this.btnEliminarReserva.TabIndex = 20;
@@ -270,19 +283,19 @@
             this.btnEliminarReserva.UseVisualStyleBackColor = true;
             this.btnEliminarReserva.Click += new System.EventHandler(this.btnEliminarReserva_Click);
             // 
-            // btnGuardarREserva
+            // btnGuardarReserva
             // 
-            this.btnGuardarREserva.Location = new System.Drawing.Point(307, 36);
-            this.btnGuardarREserva.Name = "btnGuardarREserva";
-            this.btnGuardarREserva.Size = new System.Drawing.Size(93, 40);
-            this.btnGuardarREserva.TabIndex = 19;
-            this.btnGuardarREserva.Text = "Guardar";
-            this.btnGuardarREserva.UseVisualStyleBackColor = true;
-            this.btnGuardarREserva.Click += new System.EventHandler(this.btnGuardarREserva_Click);
+            this.btnGuardarReserva.Location = new System.Drawing.Point(227, 36);
+            this.btnGuardarReserva.Name = "btnGuardarReserva";
+            this.btnGuardarReserva.Size = new System.Drawing.Size(93, 40);
+            this.btnGuardarReserva.TabIndex = 19;
+            this.btnGuardarReserva.Text = "Guardar";
+            this.btnGuardarReserva.UseVisualStyleBackColor = true;
+            this.btnGuardarReserva.Click += new System.EventHandler(this.btnGuardarReserva_Click);
             // 
             // btnCancelarReserva
             // 
-            this.btnCancelarReserva.Location = new System.Drawing.Point(165, 36);
+            this.btnCancelarReserva.Location = new System.Drawing.Point(126, 36);
             this.btnCancelarReserva.Name = "btnCancelarReserva";
             this.btnCancelarReserva.Size = new System.Drawing.Size(93, 40);
             this.btnCancelarReserva.TabIndex = 18;
@@ -304,35 +317,27 @@
             // 
             // grpHabitacionesDeMotel
             // 
-            this.grpHabitacionesDeMotel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpHabitacionesDeMotel.Controls.Add(this.listBox1);
+            this.grpHabitacionesDeMotel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpHabitacionesDeMotel.Controls.Add(this.lbHabitaciones);
             this.grpHabitacionesDeMotel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpHabitacionesDeMotel.Location = new System.Drawing.Point(882, 22);
+            this.grpHabitacionesDeMotel.Location = new System.Drawing.Point(743, 22);
             this.grpHabitacionesDeMotel.Name = "grpHabitacionesDeMotel";
-            this.grpHabitacionesDeMotel.Size = new System.Drawing.Size(225, 263);
+            this.grpHabitacionesDeMotel.Size = new System.Drawing.Size(364, 364);
             this.grpHabitacionesDeMotel.TabIndex = 19;
             this.grpHabitacionesDeMotel.TabStop = false;
-            this.grpHabitacionesDeMotel.Text = "Habitaciones del motel";
+            this.grpHabitacionesDeMotel.Text = "Habitaciones del hostal";
             // 
-            // listBox1
+            // lbHabitaciones
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Items.AddRange(new object[] {
-            "101 - Simple",
-            "102 - Doble",
-            "103 - Suite",
-            "104 - Triple",
-            "105 - Deluxe",
-            "106 - Single Deluxe",
-            "107 - Doble Económica",
-            "108 - Suite Familiar",
-            "109 - Penthouse",
-            "110 - Simple Económica"});
-            this.listBox1.Location = new System.Drawing.Point(22, 44);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(186, 204);
-            this.listBox1.TabIndex = 1;
+            this.lbHabitaciones.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHabitaciones.FormattingEnabled = true;
+            this.lbHabitaciones.ItemHeight = 19;
+            this.lbHabitaciones.Location = new System.Drawing.Point(6, 31);
+            this.lbHabitaciones.Name = "lbHabitaciones";
+            this.lbHabitaciones.Size = new System.Drawing.Size(352, 327);
+            this.lbHabitaciones.TabIndex = 1;
+            this.lbHabitaciones.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbHabitaciones_DrawItem);
             // 
             // frmReservas
             // 
@@ -348,6 +353,7 @@
             this.Controls.Add(this.txtBuscarReserva);
             this.Controls.Add(this.dgvReservas);
             this.Name = "frmReservas";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Control de reservas";
             this.Load += new System.EventHandler(this.frmReservas_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvReservas)).EndInit();
@@ -385,11 +391,12 @@
         private System.Windows.Forms.Button btnEliminarReserva;
         private System.Windows.Forms.Button btnCancelarReserva;
         private System.Windows.Forms.Button btnEditarReserva;
-        private System.Windows.Forms.Button btnGuardarREserva;
+        private System.Windows.Forms.Button btnGuardarReserva;
         private System.Windows.Forms.Label lblFechaFinReserva;
         private System.Windows.Forms.Label lblFechaInicioReserva;
         private System.Windows.Forms.Button btnSalirfrmReservas;
         private System.Windows.Forms.GroupBox grpHabitacionesDeMotel;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lbHabitaciones;
+        private System.Windows.Forms.Button btnListoEditar;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 using frmSistemaReserva.AccesoDatos;
 using frmSistemaReserva.Modelos;
@@ -24,25 +26,32 @@ namespace frmSistemaReserva.InterfazUsuario
             CargarReservas();
             CargarListaDui();
             CargarListaNumeroHabitacion();
+            CargarHabitacionesEnListBox();
             cboDuiClientes.Text = "Seleccione...";
             cboNumeroHabitacion.Text = "Seleccione...";
+            dtpFechaFinReserva.Value = DateTime.Now.AddDays(1);
+            btnEditarReserva.Enabled = true;
+
+
+            lbHabitaciones.DrawItem += lbHabitaciones_DrawItem;
+            lbHabitaciones.DrawMode = DrawMode.OwnerDrawFixed;
         }
 
         private void CargarReservas()
         {
             try
             {
-                List<Reserva> reservas = conexion.ObtenerReservas();
+                List<viewReserva> reservas = conexion.ObtenerReservas();
 
-                dgvReservas.AutoGenerateColumns = true;  // Habilitar la generación automática de columnas
-                dgvReservas.DataSource = reservas;       // Asignar la lista de usuarios al DataGridView
-                dgvReservas.Refresh();                   // Refrescar el DataGridView
+                dgvReservas.AutoGenerateColumns = true;
+                dgvReservas.DataSource = reservas;
+                dgvReservas.Refresh();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar datos de reservas" + ex.Message);
             }
-            
+
         }
 
         private void CargarListaDui()
@@ -65,8 +74,56 @@ namespace frmSistemaReserva.InterfazUsuario
                     txtNombreCliente.Text = nombreCompleto;
                 }
             };
-            
         }
+
+        private void CargarHabitacionesEnListBox()
+        {
+            try
+            {
+                // Obtener las habitaciones disponibles desde la base de datos
+                DataTable habitaciones = conexion.ListarNumeroHabitaciones();
+                lbHabitaciones.Items.Clear();
+
+                // Añadir los datos al ListBox
+                foreach (DataRow row in habitaciones.Rows)
+                {
+                    string numeroHabitacion = row["numeroHabitacion"].ToString();
+                    string tipo = row["tipo"].ToString();
+                    string estado = row["estado"].ToString();
+
+                    // Crear una línea formateada con columnas de ancho fijo
+                    string item = string.Format("{0,-5} {1,-20} {2,-10}", numeroHabitacion, tipo, estado);
+                    lbHabitaciones.Items.Add(new ListItem { Text = item, Estado = estado });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar habitaciones: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void lbHabitaciones_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            ListBox listBox = (ListBox)sender;
+            ListItem item = (ListItem)listBox.Items[e.Index];
+
+            // Establecer colores según el estado
+            Color textColor = item.Estado == "Ocupada" ? Color.Red : Color.Black;
+
+            // Dibujar fondo
+            e.DrawBackground();
+            using (Brush textBrush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawString(item.Text, e.Font, textBrush, e.Bounds);
+            }
+
+            // Dibujar el borde de enfoque si está seleccionado
+            e.DrawFocusRectangle();
+        }
+
 
         private void CargarListaNumeroHabitacion()
         {
@@ -94,9 +151,7 @@ namespace frmSistemaReserva.InterfazUsuario
         private void ActivarBotones()
         {
             btnCancelarReserva.Enabled = true;
-            btnGuardarREserva.Enabled = true;
-            btnEditarReserva.Enabled = true;
-            btnEliminarReserva.Enabled = true;
+            btnGuardarReserva.Enabled = true;
             btnNuevaReserva.Enabled = false;
             cboDuiClientes.Enabled = true;
             cboNumeroHabitacion.Enabled = true;
@@ -109,79 +164,94 @@ namespace frmSistemaReserva.InterfazUsuario
         private void DesactivarBotones()
         {
             btnCancelarReserva.Enabled = false;
-            btnGuardarREserva.Enabled = false;
-            btnEditarReserva.Enabled = false;
-            btnEliminarReserva.Enabled = false;
+            btnGuardarReserva.Enabled = false;
+            btnEditarReserva.Visible = false;
+            btnEliminarReserva.Visible = false;
             btnNuevaReserva.Enabled = true;
             cboDuiClientes.Text = "Seleccione...";
             cboDuiClientes.Enabled = false;
             cboNumeroHabitacion.Text = "Seleccione...";
             cboNumeroHabitacion.Enabled = false;
-            txtNombreCliente.Text = " ";
+            txtNombreCliente.Clear();
             txtNombreCliente.Enabled = false;
-            txtTipoHabitacion.Text = " ";
+            txtTipoHabitacion.Clear();
             txtTipoHabitacion.Enabled = false;
             dtpFechaInicioReserva.Enabled = false;
             dtpFechaFinReserva.Enabled = false;
+            btnListoEditar.Enabled = false;
+            btnListoEditar.Visible = false;
+
         }
 
         private void btnNuevaReserva_Click(object sender, EventArgs e)
         {
+            DesactivarBotones();
             ActivarBotones();
         }
 
         private void btnCancelarReserva_Click(object sender, EventArgs e)
         {
             DesactivarBotones();
+            btnEditarReserva.Enabled = true;
         }
 
 
-        private void btnGuardarREserva_Click(object sender, EventArgs e)
+        private void btnGuardarReserva_Click(object sender, EventArgs e)
         {
             // Crear un nuevo usuario con los datos ingresados en el formulario
             Reserva nuevaReserva = new Reserva()
             {
                 IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
+                Cliente = txtNombreCliente.Text.Trim(),
                 IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
+                Habitacion = txtTipoHabitacion.Text.Trim(),
                 IdUsuario = idUsuario,
                 FechaInicio = dtpFechaInicioReserva.Value,
                 FechaFin = dtpFechaFinReserva.Value,
-            };
+            }; 
 
             // Validación de campos vacíos
-            if (string.IsNullOrEmpty(Convert.ToString(nuevaReserva.IdCliente)) || string.IsNullOrEmpty(Convert.ToString(nuevaReserva.IdHabitacion)) ||
-                string.IsNullOrEmpty(Convert.ToString(nuevaReserva.IdUsuario)) || nuevaReserva.FechaInicio == null ||
-                nuevaReserva.FechaInicio.ToString() == "" || nuevaReserva.FechaFin == null ||
-                nuevaReserva.FechaInicio.ToString() == "")
+            if (cboDuiClientes.SelectedValue == null || cboNumeroHabitacion.SelectedValue == null ||
+                string.IsNullOrEmpty(nuevaReserva.Cliente) || string.IsNullOrEmpty(nuevaReserva.Habitacion))
             {
                 MessageBox.Show("Por favor, complete todos los campos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (dtpFechaInicioReserva.Value.Date >= dtpFechaFinReserva.Value.Date)
+            {
+                MessageBox.Show("La fecha de inicio no puede ser posterior o igual a la fecha de fin.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            // Insertar usuario en la base de datos utilizando el procedimiento almacenado
-            Conexion dbHelper = new Conexion();
             try
             {
+                Conexion dbHelper = new Conexion();
                 dbHelper.InsertarReservaConSP(nuevaReserva);
-                MessageBox.Show("Usuario agregado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Reserva agregada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                CargarReservas(); // Refrescar la lista de usuarios
-                //LimpiarCampos(); // Limpiar y deshabilitar los campos después de agregar
+                // Refrescar lista y limpiar campos
+                CargarListaNumeroHabitacion();
+                DesactivarBotones();
+                CargarReservas();
+                /*
+                CargarListaNumeroHabitacion();
+                cboDuiClientes.Text = "Seleccione...";
+                cboNumeroHabitacion.Text = "Seleccione...";*/
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627 || ex.Number == 2601)
+                if (ex.Number == 50001 || ex.Number == 50003)
                 {
-                    MessageBox.Show("El usuario ya existe. Por favor, intente con un nombre de usuario diferente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("La reserva contiene datos que no existen.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el usuario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al agregar el usuario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -193,7 +263,7 @@ namespace frmSistemaReserva.InterfazUsuario
                 int idReserva = Convert.ToInt32(dgvReservas.CurrentRow.Cells["IdReserva"].Value);
 
                 // Confirmar la eliminación
-                DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar este usuario?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar esta reserva?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (resultado == DialogResult.Yes)
                 {
                     // Eliminar el usuario de la base de datos
@@ -203,7 +273,7 @@ namespace frmSistemaReserva.InterfazUsuario
                         conexion.EliminarReservaConSP(idReserva);
                         MessageBox.Show("Usuario eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Actualizar la lista de usuarios
+                        DesactivarBotones();
                         CargarReservas();
 
                     }
@@ -226,6 +296,146 @@ namespace frmSistemaReserva.InterfazUsuario
         private void btnSalirfrmReservas_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btnEditarReserva_Click(object sender, EventArgs e)
+        {
+            /*
+            cboDuiClientes.Enabled = true;
+            */
+            cboNumeroHabitacion.Enabled = true;
+            btnCancelarReserva.Enabled = true;
+            btnGuardarReserva.Enabled = false;
+            btnEditarReserva.Enabled = false;
+            btnEliminarReserva.Visible = true;
+            
+            btnNuevaReserva.Enabled = false;
+            btnEditarReserva.Visible = false;
+            btnListoEditar.Visible = true;
+            btnListoEditar.Enabled = true;
+
+            dtpFechaInicioReserva.Enabled = true;
+            dtpFechaFinReserva.Enabled = true;
+        }
+
+        private void dgvReservas_SelectionChanged(object sender, EventArgs e)
+        {
+            // Si no estamos en modo edición, desactivamos los campos
+            if (btnEditarReserva.Visible)
+            {
+                DesactivarBotones();
+            }
+        }
+
+        private void dgvReservas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 1) // Hacer clic en una fila válida y en la columna correcta
+            {
+                DataGridViewRow row = dgvReservas.Rows[e.RowIndex];
+
+                if (row.Cells["Cliente"].Value != null) // Verificar si el valor no es nulo
+                {
+                    string duiSeleccionado = row.Cells["Dui"].Value.ToString();
+                    // Buscar y seleccionar el cliente correspondiente en el ComboBox
+                    foreach (DataRowView item in cboDuiClientes.Items)
+                    {
+                        if (item["nNumeroIdentificacion"].ToString() == duiSeleccionado)
+                        {
+                            cboDuiClientes.DisplayMember = "nNumeroIdentificacion";
+                            cboDuiClientes.ValueMember = "idCliente";
+                            cboDuiClientes.SelectedValue = item["idCliente"];
+                            break; // Salir del bucle una vez encontrado
+                        }
+                    }
+                    //txtNombreCliente.Text = row.Cells["Cliente"].Value.ToString();
+
+                    string haitacionSeleccionada = row.Cells["Habitacion"].Value.ToString();
+                    foreach (DataRowView item in cboNumeroHabitacion.Items)
+                    {
+                        if (item["numeroHabitacion"].ToString() == haitacionSeleccionada)
+                        {
+                            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
+                            cboNumeroHabitacion.ValueMember = "IdHabitacion";
+                            cboNumeroHabitacion.SelectedValue = item["IdHabitacion"];
+                            break; // Salir del bucle una vez encontrado
+                        }
+                    }
+                    //txtTipoHabitacion.Text = row.Cells["tipoHabitación"].Value.ToString();
+                    dtpFechaInicioReserva.Value = Convert.ToDateTime(row.Cells["FechaInicio"].Value);
+                    dtpFechaFinReserva.Value = Convert.ToDateTime(row.Cells["FechaFin"].Value);
+
+                    
+                    btnEditarReserva.Visible = true;
+                }
+                
+            }
+        }
+
+        private void btnListoEditar_Click(object sender, EventArgs e)
+        {
+            if (dgvReservas.CurrentRow != null)
+            {
+                // Obtener el Id del usuario seleccionado
+                int idReserva = Convert.ToInt32(dgvReservas.CurrentRow.Cells["IdReserva"].Value);
+
+                // Crear un usuario con los datos modificados
+                Reserva reservaModificada = new Reserva()
+                {
+                    IdReserva = idReserva,
+                    IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
+                    IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
+                    IdUsuario = idUsuario,
+                    FechaInicio = dtpFechaInicioReserva.Value,
+                    FechaFin = dtpFechaFinReserva.Value,
+                };
+
+                // Validación de campos vacíos
+                if (cboDuiClientes.SelectedValue == null || cboNumeroHabitacion.SelectedValue == null)
+                {
+                    MessageBox.Show("Por favor, complete todos los campos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (dtpFechaInicioReserva.Value.Date >= dtpFechaFinReserva.Value.Date)
+                {
+                    MessageBox.Show("La fecha de inicio no puede ser posterior o igual a la fecha de fin.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Llamar al método para actualizar el usuario en la base de datos
+                Conexion dbHelper = new Conexion();
+                try
+                {
+                    dbHelper.ActualizarReservaConSP(reservaModificada);
+                    MessageBox.Show("Reserva modificado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    DesactivarBotones();
+                    CargarReservas();
+                    btnEditarReserva.Enabled = true;
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 50002) // Código del error lanzado en caso de nombre de usuario duplicado
+                    {
+                        MessageBox.Show("La habitación seleccionada no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (ex.Number == 50001) // Código del error lanzado si el usuario no existe
+                    {
+                        MessageBox.Show("El cliente no existe. Por favor, verifique los datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al modificar el reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al modificar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione una reserva para modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

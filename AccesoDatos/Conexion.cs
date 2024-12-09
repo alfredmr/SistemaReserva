@@ -319,22 +319,22 @@ namespace frmSistemaReserva.AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error al insertar reserva: " + ex.Message);
+                    Console.WriteLine("Error al gaurdar reserva: " + ex.Message);
                     throw; // Lanzar la excepción nuevamente para que el formulario pueda manejarla
                 }
             }
         }
 
-        public List<Reserva> ObtenerReservas()
+        public List<viewReserva> ObtenerReservas()
         {
-            List<Reserva> reservas = new List<Reserva>();
+            List<viewReserva> viewReservas = new List<viewReserva>();
 
             using (SqlConnection connection = ObtenerConexion())
             {
                 try
                 {
                     connection.Open();
-                    string query = "SELECT IdReserva, IdCliente, IdHabitacion, Idusuario, FechaInicio, FechaFin, estado, fechaRegistro FROM Reservas";
+                    string query = "select * from dbo.vw_ReservasDetalle";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -342,30 +342,38 @@ namespace frmSistemaReserva.AccesoDatos
                         {
                             while (reader.Read())
                             {
-                                Reserva reserva = new Reserva()
+                                viewReserva reserva = new viewReserva()
                                 {
-
                                     IdReserva = Convert.ToInt32(reader["IdReserva"]),
-                                    IdCliente = Convert.ToInt32(reader["IdCliente"]),
-                                    IdHabitacion = Convert.ToInt32(reader["IdHabitacion"]),
-                                    IdUsuario = Convert.ToInt32(reader["Idusuario"]),
-                                    FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
-                                    FechaFin = Convert.ToDateTime(reader["FechaFin"]),
-                                    Estado = reader["estado"].ToString(),
-                                    FechaRegistro = Convert.ToDateTime(reader["fechaRegistro"])
+                                    Cliente = reader["Cliente"].ToString(),
+                                    Dui = reader["IdentificacionCliente"].ToString(),
+                                    Habitacion = Convert.ToInt32(reader["NumeroHabitacion"]),
+                                    tipoHabitación = reader["TipoHabitacion"].ToString(),
+                                    precioPorNoche = reader["PrecioPorNoche"].ToString(),
+                                    usuarioResponsable = reader["UsuarioResponsable"].ToString(),
+                                    fechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
+                                    fechaFin = Convert.ToDateTime(reader["FechaFin"]),
+                                    estadoReserva = reader["EstadoReserva"].ToString(),
+                                    estadoHabitacion = reader["EstadoHabitacion"].ToString(),
+                                    estadoPago = reader["EstadoPago"].ToString(),
+                                    montoPagado = reader["MontoPagado"]?.ToString(),
+                                    fechaPagado = reader["FechaPago"] != DBNull.Value ? Convert.ToDateTime(reader["FechaPago"]) : DateTime.MinValue,
+                                    metodoPaga = reader["MetodoPago"]?.ToString(),
+                                    tipoDivisa = reader["TipoDivisa"]?.ToString(),
+                                    fechaReserva = Convert.ToDateTime(reader["FechaReserva"])
                                 };
-                                reservas.Add(reserva);
+                                viewReservas.Add(reserva);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error al obtener usuarios: " + ex.Message);
+                    Console.WriteLine("Error al obtener reservas: " + ex.Message);
                 }
             }
 
-            return reservas;
+            return viewReservas;
         }
 
         public DataTable ListarDuiClientes()
@@ -505,6 +513,44 @@ namespace frmSistemaReserva.AccesoDatos
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error al eliminar reserva: " + ex.Message);
+                    throw; // Relanzar la excepción para manejarla en el formulario
+                }
+            }
+        }
+
+        public void ActualizarReservaConSP(Reserva reserva)
+        {
+            using (SqlConnection connection = ObtenerConexion())
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Crear el comando para llamar al procedimiento almacenado
+                    using (SqlCommand command = new SqlCommand("ModificarReserva", connection))
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Agregar parámetros para el procedimiento almacenado
+                        command.Parameters.AddWithValue("@IdReserva", reserva.IdReserva);
+                        command.Parameters.AddWithValue("@IdCliente", reserva.IdCliente);
+                        command.Parameters.AddWithValue("@IdHabitacion", reserva.IdHabitacion);
+                        command.Parameters.AddWithValue("@idusuario", reserva.IdUsuario);
+                        command.Parameters.AddWithValue("@FechaInicio", reserva.FechaInicio);
+                        command.Parameters.AddWithValue("@FechaFin", reserva.FechaFin);
+
+                        // Ejecutar el comando
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Error de base de datos al actualizar reserva: " + sqlEx.Message);
+                    throw; // Relanzar la excepción para manejarla en el formulario
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al actualizar reserva: " + ex.Message);
                     throw; // Relanzar la excepción para manejarla en el formulario
                 }
             }
