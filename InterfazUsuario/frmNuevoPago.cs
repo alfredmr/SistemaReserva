@@ -34,6 +34,7 @@ namespace frmSistemaReserva.InterfazUsuario
             lblCliente.Text = cliente;
             lblHabitacion.Text = habitacion;
             lblCostoTotal.Text = costoTotal.ToString("C");
+            txtMonto.Text = costoTotal.ToString("C");
 
             // Configurar los ComboBox
             cboMetodoPago.Items.AddRange(new string[] { "Efectivo", "Tarjeta de Crédito", "Transferencia Bancaria", "PayPal" });

@@ -123,14 +123,15 @@ namespace frmSistemaReserva.InterfazUsuario
             cboNumeroHabitacion.ValueMember = "IdHabitacion";
             cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
 
-            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
+            
             cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
             {
                 if (cboNumeroHabitacion.SelectedIndex >= 0)
                 {
                     DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
                     txtTipoHabitacion.Text = row["tipo"].ToString();
-                    // Almacena el precio por noche en el control (puede ser en el Tag).
+                    
+
                     txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
 
                 }

@@ -38,12 +38,12 @@
             this.lblIdReserva = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.cboMetodoPago = new System.Windows.Forms.ComboBox();
-            this.cboTipoDivisa = new System.Windows.Forms.ComboBox();
             this.txtMonto = new System.Windows.Forms.TextBox();
+            this.cboTipoDivisa = new System.Windows.Forms.ComboBox();
+            this.cboMetodoPago = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.btnGuardarPago = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -153,23 +153,28 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Detalle de Pago";
             // 
-            // label5
+            // txtMonto
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(126, 20);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Método de Pago";
+            this.txtMonto.Location = new System.Drawing.Point(273, 78);
+            this.txtMonto.Name = "txtMonto";
+            this.txtMonto.Size = new System.Drawing.Size(100, 26);
+            this.txtMonto.TabIndex = 5;
             // 
-            // label6
+            // cboTipoDivisa
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(296, 53);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 20);
-            this.label6.TabIndex = 1;
-            this.label6.Text = "Monto";
+            this.cboTipoDivisa.FormattingEnabled = true;
+            this.cboTipoDivisa.Location = new System.Drawing.Point(136, 78);
+            this.cboTipoDivisa.Name = "cboTipoDivisa";
+            this.cboTipoDivisa.Size = new System.Drawing.Size(121, 28);
+            this.cboTipoDivisa.TabIndex = 4;
+            // 
+            // cboMetodoPago
+            // 
+            this.cboMetodoPago.FormattingEnabled = true;
+            this.cboMetodoPago.Location = new System.Drawing.Point(9, 78);
+            this.cboMetodoPago.Name = "cboMetodoPago";
+            this.cboMetodoPago.Size = new System.Drawing.Size(121, 28);
+            this.cboMetodoPago.TabIndex = 3;
             // 
             // label7
             // 
@@ -180,28 +185,23 @@
             this.label7.TabIndex = 2;
             this.label7.Text = "Divisa";
             // 
-            // cboMetodoPago
+            // label6
             // 
-            this.cboMetodoPago.FormattingEnabled = true;
-            this.cboMetodoPago.Location = new System.Drawing.Point(9, 78);
-            this.cboMetodoPago.Name = "cboMetodoPago";
-            this.cboMetodoPago.Size = new System.Drawing.Size(121, 28);
-            this.cboMetodoPago.TabIndex = 3;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(296, 53);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 20);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "Monto";
             // 
-            // cboTipoDivisa
+            // label5
             // 
-            this.cboTipoDivisa.FormattingEnabled = true;
-            this.cboTipoDivisa.Location = new System.Drawing.Point(136, 78);
-            this.cboTipoDivisa.Name = "cboTipoDivisa";
-            this.cboTipoDivisa.Size = new System.Drawing.Size(121, 28);
-            this.cboTipoDivisa.TabIndex = 4;
-            // 
-            // txtMonto
-            // 
-            this.txtMonto.Location = new System.Drawing.Point(273, 78);
-            this.txtMonto.Name = "txtMonto";
-            this.txtMonto.Size = new System.Drawing.Size(100, 26);
-            this.txtMonto.TabIndex = 5;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 53);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(126, 20);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Método de Pago";
             // 
             // btnGuardarPago
             // 
@@ -222,8 +222,10 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmNuevoPago";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmNuevoPago";
             this.Load += new System.EventHandler(this.frmNuevoPago_Load);
             this.groupBox1.ResumeLayout(false);

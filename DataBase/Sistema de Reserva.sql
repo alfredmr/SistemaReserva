@@ -861,6 +861,9 @@ BEGIN
         -- Verificar si existe el registro antes de eliminarlo
         IF EXISTS (SELECT 1 FROM Reservas WHERE IdReserva = @IdReserva)
         BEGIN
+            -- Eliminar el pago relacionado
+            DELETE FROM Pagos WHERE IdReserva = @IdReserva;
+
             -- Eliminar la reserva
             DELETE FROM Reservas WHERE IdReserva = @IdReserva;
 

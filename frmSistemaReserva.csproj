@@ -121,9 +121,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LogicaNegocio\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\Imagen de WhatsApp 2024-11-28 a las 22.46.41_eaf6aded.jpg" />
   </ItemGroup>
