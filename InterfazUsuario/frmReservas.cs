@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using frmSistemaReserva.AccesoDatos;
 using frmSistemaReserva.Modelos;
+using System.Linq;
 
 namespace frmSistemaReserva.InterfazUsuario
 {
@@ -68,6 +69,70 @@ namespace frmSistemaReserva.InterfazUsuario
                 {
                     DataRowView row = (DataRowView)cboDuiClientes.SelectedItem;
                     txtNombreCliente.Text = row["nombreCompleto"].ToString();
+                }
+            };
+        }
+
+        /*
+        private void CargarListaNumeroHabitacion()
+        {
+            // Obtener todas las habitaciones
+            DataTable habitaciones = conexion.ListarNumeroHabitaciones();
+
+            if (habitaciones != null)
+            {
+                // Filtrar habitaciones diferentes a "Ocupada"
+                DataRow[] filasFiltradas = habitaciones.Select("estado <> 'Ocupada'");
+
+                if (filasFiltradas.Length > 0)
+                {
+                    // Crear un nuevo DataTable a partir de las filas filtradas
+                    DataTable habitacionesFiltradas = filasFiltradas.CopyToDataTable();
+
+                    // Asignar el DataTable filtrado al ComboBox
+                    cboNumeroHabitacion.DataSource = habitacionesFiltradas;
+                    cboNumeroHabitacion.ValueMember = "IdHabitacion";
+                    cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
+
+                // Evento para actualizar el tipo de habitación y el precio al seleccionar una habitación
+                cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
+                {
+                    if (cboNumeroHabitacion.SelectedIndex >= 0)
+                    {
+                        DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
+
+                        // Actualizar el tipo de habitación en un TextBox
+                        txtTipoHabitacion.Text = row["tipo"].ToString();
+
+                        // Guardar el precio por noche en el Tag (o actualizar otro control si es necesario)
+                        txtTipoHabitacion.Tag = row["precioPorNoche"];
+                    }
+                };
+            }
+            else
+            {
+                MessageBox.Show("No hay habitaciones disponibles para mostrar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }*/
+
+        
+        private void CargarListaNumeroHabitacion()
+        {
+            //Reserva listaNumero = new Reserva();
+            cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
+            cboNumeroHabitacion.ValueMember = "IdHabitacion";
+            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
+
+            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
+            cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
+            {
+                if (cboNumeroHabitacion.SelectedIndex >= 0)
+                {
+                    DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
+                    txtTipoHabitacion.Text = row["tipo"].ToString();
+                    // Almacena el precio por noche en el control (puede ser en el Tag).
+                    txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
+
                 }
             };
         }
@@ -225,69 +290,6 @@ namespace frmSistemaReserva.InterfazUsuario
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        /*
-       private void CargarListaNumeroHabitacion()
-       {
-           // Obtener todas las habitaciones
-           DataTable habitaciones = conexion.ListarNumeroHabitaciones();
-
-           if (habitaciones != null)
-           {
-               // Filtrar habitaciones diferentes a "Ocupada"
-               DataRow[] filasFiltradas = habitaciones.Select("estado <> 'Ocupada'");
-
-               if (filasFiltradas.Length > 0)
-               {
-                   // Crear un nuevo DataTable a partir de las filas filtradas
-                   DataTable habitacionesFiltradas = filasFiltradas.CopyToDataTable();
-
-                   // Asignar el DataTable filtrado al ComboBox
-                   cboNumeroHabitacion.DataSource = habitacionesFiltradas;
-                   cboNumeroHabitacion.ValueMember = "IdHabitacion";
-                   cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
-
-               // Evento para actualizar el tipo de habitación y el precio al seleccionar una habitación
-               cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
-               {
-                   if (cboNumeroHabitacion.SelectedIndex >= 0)
-                   {
-                       DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
-
-                       // Actualizar el tipo de habitación en un TextBox
-                       txtTipoHabitacion.Text = row["tipo"].ToString();
-
-                       // Guardar el precio por noche en el Tag (o actualizar otro control si es necesario)
-                       txtTipoHabitacion.Tag = row["precioPorNoche"];
-                   }
-               };
-           }
-           else
-           {
-               MessageBox.Show("No hay habitaciones disponibles para mostrar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-           }
-       }
-
-       */
-       private void CargarListaNumeroHabitacion()
-       {
-           //Reserva listaNumero = new Reserva();
-           cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
-           cboNumeroHabitacion.ValueMember = "IdHabitacion";
-           cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
-
-           // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
-           cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
-           {
-               if (cboNumeroHabitacion.SelectedIndex >= 0)
-               {
-                   DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
-                   txtTipoHabitacion.Text = row["tipo"].ToString();
-                   // Almacena el precio por noche en el control (puede ser en el Tag).
-                   txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
-
-               }
-           };
-       }
 
         private void btnEliminarReserva_Click(object sender, EventArgs e)
         {

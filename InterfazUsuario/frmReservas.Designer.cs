@@ -94,6 +94,7 @@
             this.btnBuscarReserva.TabIndex = 2;
             this.btnBuscarReserva.Text = "Buscar";
             this.btnBuscarReserva.UseVisualStyleBackColor = true;
+            this.btnBuscarReserva.Click += new System.EventHandler(this.btnBuscarReserva_Click);
             // 
             // txtNombreCliente
             // 

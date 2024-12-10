@@ -10,10 +10,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace frmSistemaReserva.AccesoDatos
 {
     //"Server=localhost;Database=SistemaReservas;User Id=sa;Password=Reserva2025;"
+    //"Server=DESKTOP-S5LF363\\SQLEXPRESS;Database=SistemaReservas;integrated security=true";
     internal class Conexion
     {
         // Cadena de conexión a la base de datos
-        private readonly string connectionString = "Server=localhost;Database=SistemaReservas;User Id=sa;Password=Reserva2025;";
+        private readonly string connectionString = "Server=DESKTOP-S5LF363\\SQLEXPRESS;Database=SistemaReservas;integrated security=true";
 
         // Método para obtener una nueva conexión a la base de datos
         public SqlConnection ObtenerConexion()
