@@ -43,7 +43,6 @@ namespace frmSistemaReserva.InterfazUsuario
             try
             {
                 List<viewReserva> reservas = conexion.ObtenerReservas();
-
                 dgvReservas.AutoGenerateColumns = true;
                 dgvReservas.DataSource = reservas;
                 dgvReservas.Refresh();

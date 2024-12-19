@@ -14,8 +14,6 @@ namespace frmSistemaReserva.InterfazUsuario
         private readonly string habitacion;
         private readonly decimal costoTotal;
 
-
-
         public frmNuevoPago(int idReserva, string cliente, string habitacion, decimal costoTotal)
         {
             InitializeComponent();
